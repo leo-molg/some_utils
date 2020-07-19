@@ -30,6 +30,7 @@ class RedisForSingleton:
     def __init__(self, **kwargs):
         host = kwargs.get("host")
         port = kwargs.get("port")
+        db = kwargs.get("db", 0)
         max_connections = int(kwargs.get("max_connections", 20))
         socket_timeout = int(kwargs.get("socket_timeout", 10))
         socket_connect_timeout = int(kwargs.get("socket_connect_timeout", 5))
@@ -37,6 +38,7 @@ class RedisForSingleton:
         connection_params = {
             "host": host,
             "port": port,
+            "db": db,
             "max_connections": max_connections,
             "password": password,
             "socket_timeout": socket_timeout,
@@ -46,26 +48,28 @@ class RedisForSingleton:
         self.redis = NewRedis(connection_pool=pools)
 
     @classmethod
-    def get_instance(cls):
+    def get_instance(cls, redis_config):
 
         if not RedisForSingleton.INSTANCE:
             init_config = {
                 "host": redis_config["host"],
                 "port": redis_config["port"],
                 "max_connections": redis_config["max_connections"],
-                "password": redis_config["password"]
+                "password": redis_config["password"],
+                "db": redis_config["db"]
             }
             RedisForSingleton.INSTANCE = RedisForSingleton(**init_config)
         return RedisForSingleton.INSTANCE
 
 
 if __name__ == '__main__':
-    redis_config = {
-        "host": "",
-        "port": "",
-        "max_connections": "",
-        "password": ""
-    }
+    # redis_config = {
+    #     "host": "",
+    #     "port": "",
+    #     "max_connections": "",
+    #     "password": ""
+    # }
+    pass
 
 
 

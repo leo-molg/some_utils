@@ -9,7 +9,14 @@ class ExampleLogin(object):
         self.key = key
 
     def get_token(self):
-        redis_conn = redis_login_util.RedisForSingleton.get_instance().redis
+        init_config = {
+            "host": "",
+            "port": "",
+            "max_connections": "",
+            "password": "",
+            "db": 0
+        }
+        redis_conn = redis_login_util.RedisForSingleton.get_instance(init_config).redis
         token = redis_conn.get(self.key)
         if token:
             return token
